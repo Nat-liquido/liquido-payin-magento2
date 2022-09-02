@@ -1,0 +1,23 @@
+<div>
+    <h1>Liquido Pagamentos</h1>
+    <?php if (!$this->hasFailed()) : ?>
+        <h3>Número do pedido: <?php echo $this->getOrderId() ?></h3>
+        <h2>Pague seu boleto pelo seu app de pagamentos ou Internet Banking</h2>
+        <iframe src="https://docs.google.com/gview?url=<?php echo $this->getBoletoUrl() ?>&embedded=true" style="width:900px; height:900px;" frameborder="0"></iframe>
+        <a target="_blank" href="<?php echo $this->getBoletoUrl() ?>">Baixar Boleto</a>
+        <hr />
+        <div id="boleto-digital-line-copy-paste">
+            <fieldset class="fieldset">
+                <label for="boleto-digital-line">Se preferir, você pode pagá-lo copiando e colando o código abaixo:</label><br>
+                <input type="text" id="boleto-digital-line" name="boleto-digital-line" readonly value="<?php echo $this->getBoletoDigitalLine() ?>"><br>
+            </fieldset>
+            <div class="actions-toolbar">
+                <div class="primary">
+                    <button onclick="copyToClipboard('boleto-digital-line')" class="action primary" title="<?php echo __('Copiar código') ?>">
+                        <span><?php echo __('Copiar código') ?></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>

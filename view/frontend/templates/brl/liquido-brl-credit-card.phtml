@@ -1,0 +1,25 @@
+<style>
+    .error-message {
+        padding: 12px;
+        border-radius: 3px;
+        background-color: #ffcccc;
+        color: #ff4d4d;
+        font-weight: bold;
+    }
+</style>
+<div class="liquido-container">
+    <h1>Liquido Pagamentos</h1>
+    <?php if (!$this->hasFailed()) : ?>
+        <h3>Número do pedido: <?php echo $this->getOrderId() ?></h3>
+        <h3>Você pagou: <?php 
+            /*$orderTotal = $this->getOrderTotal() / 100;
+            $totalDecimal = number_format($orderTotal, 2, ',', '.');*/
+            echo  $this->getInstallments();
+        ?></h3>
+        <h3>Valor total: R$ <?php 
+            $orderTotal = $this->getOrderTotal() / 100;
+            $totalDecimal = number_format($orderTotal, 2, ',', '.');
+            echo $totalDecimal;
+        ?></h3>
+    <?php endif; ?>
+</div>
