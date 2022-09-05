@@ -19,8 +19,8 @@
     },
     "repositories": [
       {
-          "type": "composer",
-          "url": "https://github.com/Nat-liquido/liquido-payin-magento2.git"
+        "type": "composer", 
+        "url": "https://repo.packagist.com/liquido-br/"
       }
     ]
   }
