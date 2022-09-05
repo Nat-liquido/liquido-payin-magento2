@@ -16,6 +16,12 @@
       "psr-4": {
         "Liquido\\PayIn\\": ""
       }
-    }
+    },
+    "repositories": [
+      {
+          "type": "composer",
+          "url": "https://github.com/Nat-liquido/liquido-payin-magento2.git"
+      }
+    ]
   }
  
