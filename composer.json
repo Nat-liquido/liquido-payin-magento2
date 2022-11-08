@@ -1,21 +1,20 @@
 {
-    "name": "liquido-brl/payin",
-    "description": "Liquido Payments offers the best payment solutions with the lowest fees on the market.",
-    "type": "magento2-module",
-    "version": "0.0.2",
-    "license": [
-      "OSL-3.0",
-      "AFL-3.0"
+  "name": "liquido-brl/payin",
+  "description": "Liquido Payments offers the best payment solutions with the lowest fees on the market.",
+  "type": "magento2-module",
+  "version": "0.0.7",
+  "license": "MIT",
+  "require": {
+    "php": "~7.4.0||~8.1.0",
+    "magento/framework": "103.0.5",
+    "liquido-brl/payin-php-sdk": "0.0.4"
+  },
+  "autoload": {
+    "files": [
+      "registration.php"
     ],
-    "require": {
-      "php": "~7.4.0||~8.1.0",
-      "magento/framework": "103.0.5"
-    },
-    "autoload": {
-      "files": [ "registration.php" ],
-      "psr-4": {
-        "Liquido\\PayIn\\": ""
-      }
+    "psr-4": {
+      "Liquido\\PayIn\\": ""
     }
   }
- 
+}

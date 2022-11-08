@@ -2,6 +2,7 @@
 
 namespace Liquido\PayIn\Helper\Brl;
 
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use \Magento\Framework\App\Helper\AbstractHelper;
 use \Psr\Log\LoggerInterface;
 
@@ -10,11 +11,13 @@ use \Liquido\PayIn\Model\Brl\ResourceModel\LiquidoBrlSalesOrder as LiquidoBrlSal
 use \Liquido\PayIn\Model\Brl\ResourceModel\LiquidoBrlSalesOrder\Collection as LiquidoBrlSalesOrderCollection;
 use \Liquido\PayIn\Model\MagentoSalesOrder;
 use \Liquido\PayIn\Util\Brl\LiquidoBrlPayInStatus;
+use \LiquidoBrl\PayInPhpSdk\Util\PayInStatus;
 
 class LiquidoBrlSalesOrderHelper extends AbstractHelper
 {
 
     private LoggerInterface $logger;
+    private TimezoneInterface $timezoneInterface;
     private LiquidoBrlSalesOrder $liquidoBrlSalesOrder;
     private LiquidoBrlSalesOrderResourceModel $liquidoBrlSalesOrderResourceModel;
     private LiquidoBrlSalesOrderCollection $liquidoBrlSalesOrderCollection;
@@ -22,12 +25,14 @@ class LiquidoBrlSalesOrderHelper extends AbstractHelper
 
     public function __construct(
         LoggerInterface $logger,
+        TimezoneInterface $timezoneInterface,
         LiquidoBrlSalesOrder $liquidoBrlSalesOrder,
         LiquidoBrlSalesOrderResourceModel $liquidoBrlSalesOrderResourceModel,
         LiquidoBrlSalesOrderCollection $liquidoBrlSalesOrderCollection,
         LiquidoBrlConfigData $liquidoBrlConfigData
     ) {
         $this->logger = $logger;
+        $this->timezoneInterface = $timezoneInterface;
         $this->liquidoBrlSalesOrder = $liquidoBrlSalesOrder;
         $this->liquidoBrlSalesOrderResourceModel = $liquidoBrlSalesOrderResourceModel;
         $this->liquidoBrlSalesOrderCollection = $liquidoBrlSalesOrderCollection;
@@ -43,8 +48,14 @@ class LiquidoBrlSalesOrderHelper extends AbstractHelper
             $liquidoBrlSalesOrder->setData("idempotency_key", $orderData->getData("idempotencyKey"));
             $liquidoBrlSalesOrder->setData("transfer_status", $orderData->getData("transferStatus"));
             $liquidoBrlSalesOrder->setData("payment_method", $orderData->getData("paymentMethod"));
+
             $environment = $this->liquidoBrlConfigData->isProductionModeActived() ? "PRODUCTION" : "STAGING";
             $liquidoBrlSalesOrder->setData("environment", $environment);
+
+            $dateTimeNow = $this->timezoneInterface->date()->format('Y-m-d H:i:s');
+            $liquidoBrlSalesOrder->setData("created_at", $dateTimeNow);
+            $liquidoBrlSalesOrder->setData("updated_at", $dateTimeNow);
+
             $this->liquidoBrlSalesOrderResourceModel->save($liquidoBrlSalesOrder);
         } catch (\Exception $e) {
             echo $e->getMessage();
@@ -83,7 +94,7 @@ class LiquidoBrlSalesOrderHelper extends AbstractHelper
         $liquidoSalesOrderAlreadyExists = $foundLiquidoSalesOrder->getData('order_id') != null;
         $liquidoSalesOrderAlreadyExistsAndResponseFailed = $liquidoSalesOrderAlreadyExists
             && ($foundLiquidoSalesOrder->getData('transfer_status') == null
-                || $foundLiquidoSalesOrder->getData('transfer_status') == LiquidoBrlPayInStatus::FAILED
+                || $foundLiquidoSalesOrder->getData('transfer_status') == PayInStatus::FAILED
             );
 
         if ($liquidoSalesOrderAlreadyExists && !$liquidoSalesOrderAlreadyExistsAndResponseFailed) {
@@ -98,6 +109,8 @@ class LiquidoBrlSalesOrderHelper extends AbstractHelper
     {
         try {
             $foundLiquidoSalesOrder->setData("idempotency_key", $liquidoIdempotencyKey);
+            $dateTimeNow = $this->timezoneInterface->date()->format('Y-m-d H:i:s');
+            $foundLiquidoSalesOrder->setData("updated_at", $dateTimeNow);
             $this->liquidoBrlSalesOrderResourceModel->save($foundLiquidoSalesOrder);
         } catch (\Exception $e) {
             echo $e->getMessage();
@@ -108,6 +121,8 @@ class LiquidoBrlSalesOrderHelper extends AbstractHelper
     {
         try {
             $foundLiquidoSalesOrder->setData("transfer_status", $newTransferStatus);
+            $dateTimeNow = $this->timezoneInterface->date()->format('Y-m-d H:i:s');
+            $foundLiquidoSalesOrder->setData("updated_at", $dateTimeNow);
             $this->liquidoBrlSalesOrderResourceModel->save($foundLiquidoSalesOrder);
         } catch (\Exception $e) {
             echo $e->getMessage();
@@ -118,6 +133,8 @@ class LiquidoBrlSalesOrderHelper extends AbstractHelper
     {
         try {
             $foundLiquidoSalesOrder->setData("payment_method", $newPaymentMethod);
+            $dateTimeNow = $this->timezoneInterface->date()->format('Y-m-d H:i:s');
+            $foundLiquidoSalesOrder->setData("updated_at", $dateTimeNow);
             $this->liquidoBrlSalesOrderResourceModel->save($foundLiquidoSalesOrder);
         } catch (\Exception $e) {
             echo $e->getMessage();

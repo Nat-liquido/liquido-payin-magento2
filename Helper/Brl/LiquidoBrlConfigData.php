@@ -4,6 +4,7 @@ namespace Liquido\PayIn\Helper\Brl;
 
 use \Magento\Framework\App\ObjectManager;
 use \Magento\Framework\App\Helper\AbstractHelper;
+use \Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use \Magento\Framework\UrlInterface;
 
 class LiquidoBrlConfigData extends AbstractHelper
@@ -15,11 +16,19 @@ class LiquidoBrlConfigData extends AbstractHelper
     private const LIQUIDO_PRODUCTION_AUTH_URL = "https://authsg.liquido.com/oauth2/token";
     private const LIQUIDO_PRODUCTION_VIRGO_BASE_URL = "https://api.liquido.com";
 
-    protected $objectManager;
+    public const CURRENCY = "BRL";
+    public const COUNTRY = "BR";
+    public const PAYMENT_FLOW_DIRECT = "DIRECT";
 
-    public function __construct()
+    protected $objectManager;
+    private $encryptor;
+
+    public function __construct(
+        Encryptor $encryptor
+    )
     {
         $this->objectManager = ObjectManager::getInstance();
+        $this->encryptor = $encryptor;
     }
 
     public function getCallbackUrl()
@@ -98,7 +107,8 @@ class LiquidoBrlConfigData extends AbstractHelper
                 $path = "payment/liquidobrl/prod_client_secret";
             }
             $clientSecret = $this->objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue($path);
-            return $clientSecret;
+            $decryptedClientSecret = $this->encryptor->decrypt($clientSecret);
+            return $decryptedClientSecret;
         } catch (\Exception $e) {
             echo $e->getMessage();
             return null;
