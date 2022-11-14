@@ -8,6 +8,8 @@ use \Magento\Framework\View\Element\Template\Context;
 use \Liquido\PayIn\Model\Brl\LiquidoBrlPayInSession;
 use \Liquido\PayIn\Util\Brl\LiquidoBrlPaymentMethodType;
 
+use \LiquidoBrl\PayInPhpSdk\Util\Brazil\PaymentMethod;
+
 class LiquidoBrlCreditCard extends Template
 {
 
@@ -56,7 +58,7 @@ class LiquidoBrlCreditCard extends Template
 
     public function getInstallments()
     {
-        if ($this->getPaymentMethodType() == LiquidoBrlPaymentMethodType::CREDIT_CARD) {
+        if ($this->getPaymentMethodType() == PaymentMethod::CREDIT_CARD) {
             return $this->payInSession->getData("creditCardResultData")->getData("installments");
         }
         return 1;
