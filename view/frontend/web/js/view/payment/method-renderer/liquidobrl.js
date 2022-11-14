@@ -11,7 +11,7 @@ define(
         return Component.extend({
             defaults: {
                 redirectAfterPlaceOrder: false,
-                template: 'Liquido_PayIn/payment/liquido-brl-checkout-form'
+                template: 'Liquido_PayIn/payment/liquido-checkout-form'
             },
             afterPlaceOrder: function () {
                 jQuery("body").trigger("processStart");
