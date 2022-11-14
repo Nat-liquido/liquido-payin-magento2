@@ -6,10 +6,10 @@ abstract class LiquidoCoPayInMethod
 {
     public const PSE = [
         "title" => "PSE",
-        "description" => "El pago puede ser aprobado al instante..",
+        "description" => "El pago puede ser aprobado al instante.",
         "image" => "Liquido_PayIn::images/pse.png"
     ];
-    public const BOLETO = [
+    public const CASH = [
         "title" => "Cash",
         "description" => "El pago puede ser aprobado al instante.",
         "image" => "Liquido_PayIn::images/cash.png"
